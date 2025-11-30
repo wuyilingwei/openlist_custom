@@ -161,9 +161,6 @@
     }
 
     .custom-footer {
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
         bottom: 18px;          /* 距离视口底部 18px，可自己调 */
         z-index: 1200;         /* 保证在列表之上 */
         text-align: center;

@@ -16,6 +16,13 @@
 
 <!-- 延迟加载JS -->
 <script>
+  // 全局配置：当 localStorage 中无 'lang' 时使用此默认值
+  window.OPENLIST_CONFIG = window.OPENLIST_CONFIG || {};
+  if (!window.OPENLIST_CONFIG.DEFAULT_LANG) {
+    window.OPENLIST_CONFIG.DEFAULT_LANG = 'zh-CN';
+  }
+</script>
+<script>
   let interval = setInterval(() => {
     if (document.querySelector(".footer")) {
       document.querySelector("#customize").style.display = "";
@@ -47,8 +54,8 @@
         svg.style.cursor = "pointer";
         svg.style.position = "relative";
 
-        // 创建自定义 tooltip 元素
-        const lang = localStorage.getItem('lang');
+        // 创建自定义 tooltip 元素（当 localStorage 中不存在 lang 时使用全局默认值）
+        const lang = localStorage.getItem('lang') || (window.OPENLIST_CONFIG && window.OPENLIST_CONFIG.DEFAULT_LANG) || 'zh-CN';
         const tooltipText = (lang === 'zh-CN') ? titleZh : titleEn;
         const tooltip = document.createElement("div");
         tooltip.textContent = tooltipText;
