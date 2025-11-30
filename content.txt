@@ -1,0 +1,421 @@
+<!-- 延迟加载 -->
+<div id="customize" style="display: none;">
+  <div>
+    <br />
+    <center class="custom-footer">
+        <div class="custom-footer-power">
+          <a id="power_text">
+            Powered By OpenList
+          </a>
+        </div>
+      </div>
+    </center>
+    <br />
+  </div>
+</div>
+
+<!-- 延迟加载JS -->
+<script>
+  let interval = setInterval(() => {
+    if (document.querySelector(".footer")) {
+      document.querySelector("#customize").style.display = "";
+      clearInterval(interval);
+    }
+  }, 200);
+</script>
+
+<script>
+  (function () {
+    const addButtonsInterval = setInterval(() => {
+      const toolbarInner = document.querySelector(".left-toolbar-in");
+      if (!toolbarInner) return;
+
+      // 通用创建函数：支持自定义 viewBox
+      function createToolbarLink(tips, href, pathD, titleZh, titleEn, viewBox = "0 0 24 24") {
+        const svgNS = "http://www.w3.org/2000/svg";
+        const svg = document.createElementNS(svgNS, "svg");
+        svg.setAttribute("viewBox", viewBox);
+        svg.setAttribute("height", "1em");
+        svg.setAttribute("width", "1em");
+        svg.setAttribute("fill", "currentColor");
+        svg.setAttribute("color", "currentColor");
+        svg.setAttribute("tips", tips);
+        svg.setAttribute(
+          "class",
+          "hope-icon hope-c-XNyZK hope-c-PJLV hope-c-PJLV-idBCZDE-css toolbar-extra"
+        );
+        svg.style.cursor = "pointer";
+        svg.style.position = "relative";
+
+        // 创建自定义 tooltip 元素
+        const lang = localStorage.getItem('lang');
+        const tooltipText = (lang === 'zh-CN') ? titleZh : titleEn;
+        const tooltip = document.createElement("div");
+        tooltip.textContent = tooltipText;
+        tooltip.className = "custom-tooltip tooltip-left";
+        
+        // 将tooltip添加到body中而不是svg内部
+        document.body.appendChild(tooltip);
+
+        // 让 SVG 本身表现得像按钮
+        svg.setAttribute("role", "button");
+        svg.setAttribute("tabindex", "0");
+        svg.setAttribute("aria-label", tooltipText);
+
+        // 图标路径
+        const path = document.createElementNS(svgNS, "path");
+        path.setAttribute("fill", "currentColor");
+        path.setAttribute("d", pathD);
+        svg.appendChild(path);
+
+        // 计算tooltip位置的函数
+        function updateTooltipPosition() {
+          const rect = svg.getBoundingClientRect();
+          const tooltipRect = tooltip.getBoundingClientRect();
+          
+          // 定位在元素左侧
+          tooltip.style.left = (rect.left - tooltipRect.width - 10) + 'px';
+          tooltip.style.top = (rect.top + rect.height / 2 - tooltipRect.height / 2) + 'px';
+        }
+
+        // 鼠标悬停事件
+        svg.addEventListener("mouseenter", () => {
+          updateTooltipPosition();
+          tooltip.style.opacity = "1";
+          tooltip.style.visibility = "visible";
+        });
+
+        svg.addEventListener("mouseleave", () => {
+          tooltip.style.opacity = "0";
+          tooltip.style.visibility = "hidden";
+        });
+
+        // 窗口大小改变时重新计算位置
+        window.addEventListener("resize", () => {
+          if (tooltip.style.visibility === "visible") {
+            updateTooltipPosition();
+          }
+        });
+
+        // 点击打开新标签
+        svg.addEventListener("click", function (e) {
+          e.stopPropagation();
+          window.open(href, "_blank");
+        });
+
+        // 键盘回车也能触发
+        svg.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            window.open(href, "_blank");
+          }
+        });
+
+        toolbarInner.appendChild(svg);
+      }
+
+      // 登录按钮（24×24 图标）
+      createToolbarLink(
+        "login",
+        "/@login",
+        "M10 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0 10c-3.314 0-6 2.239-6 5v1h2v-1c0-1.657 1.79-3 4-3h1v-2h-1Zm5 1v3h-3v2h3v3l5-4-5-4Z",
+        "用户登录",
+        "User Login",
+        "0 0 24 24"
+      );
+
+      // 管理按钮（iconfont 1024×1024 图标）
+      createToolbarLink(
+        "manage",
+        "/@manage",
+        "M224 423.84V231.744l192-0.096 0.096 192.096L224 423.84z m192.096-256.096H223.904A64 64 0 0 0 160 231.68v192.192a64 64 0 0 0 63.904 63.904h192.192A64 64 0 0 0 480 423.84V231.68a64 64 0 0 0-63.904-63.904zM224 807.84v-192.096l192-0.096 0.096 192.096L224 807.84z m192.096-256.096H223.904A64 64 0 0 0 160 615.68v192.192a64 64 0 0 0 63.904 63.904h192.192A64 64 0 0 0 480 807.84V615.68a64 64 0 0 0-63.904-63.904zM704.064 463.616l-135.84-135.84 135.712-135.84 135.904 135.744-135.776 135.936z m181.024-181.024l-135.904-135.904a64 64 0 0 0-90.368 0L522.912 282.56a63.456 63.456 0 0 0-18.656 45.056 63.456 63.456 0 0 0 18.656 45.312l135.904 135.936a63.904 63.904 0 0 0 90.368-0.032l135.904-135.904a63.936 63.936 0 0 0 0-90.368zM608 807.84v-192.096l192-0.096 0.096 192.096-192.096 0.096z m192.096-256.096h-192.192A64 64 0 0 0 544 615.68v192.192a64 64 0 0 0 63.904 63.904h192.192A64 64 0 0 0 864 807.84V615.68a64 64 0 0 0-63.904-63.904z",
+        "系统管理",
+        "System Management",
+        "0 0 1024 1024"
+      );
+
+      // 删除 "更多" 按钮
+      setTimeout(() => {
+        const moreButton = document.querySelector('svg[tips="more"]');
+        if (moreButton) {
+          moreButton.remove();
+        }
+      }, 100);
+
+      clearInterval(addButtonsInterval);
+    }, 400);
+  })();
+</script>
+
+<script>
+  // 智能路径重定向功能
+  (function() {
+    // ==================== 配置项 ====================
+    const CONFIG = {
+      // 访客基础URL（未登录用户的URL前缀）
+      GUEST_BASE_URL: '/public',
+      
+      // 是否启用调试模式
+      DEBUG: false
+    };
+    
+    // 调试日志函数
+    function debugLog(...args) {
+      if (CONFIG.DEBUG) {
+        console.log(...args);
+      }
+    }
+    
+    // ==================== 核心函数 ====================
+    
+    // 获取localStorage中的认证token
+    function getAuthToken() {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          debugLog(`🔐 [认证] 找到localStorage token: ${token.substring(0, 10)}...`);
+          return token;
+        }
+        debugLog(`🔓 [认证] localStorage中未找到token，使用访客身份`);
+        return null;
+      } catch (error) {
+        console.error(`💥 [认证错误] 获取localStorage token失败:`, error);
+        return null;
+      }
+    }
+    
+    // 构建请求头（包含认证信息）
+    function buildRequestHeaders() {
+      const headers = { 'Content-Type': 'application/json' };
+      const token = getAuthToken();
+      
+      if (token) {
+        headers['Authorization'] = `${token}`;
+        debugLog(`🔐 [请求头] 已添加认证头`);
+      } else {
+        debugLog(`🔓 [请求头] 无认证头（访客模式）`);
+      }
+      
+      return headers;
+    }
+    
+    // 检查路径是否存在的通用函数
+    async function checkPathExists(path) {
+      debugLog(`🔍 [checkPathExists] 检查路径: "${path}"`);
+      
+      try {
+        const requestBody = { path: path, password: "" };
+        const headers = buildRequestHeaders();
+        
+        debugLog(`📤 [API请求] POST /api/fs/get`, requestBody);
+        debugLog(`🔐 [认证状态] ${headers.Authorization ? '已认证' : '访客模式'}`);
+        
+        const response = await fetch('/api/fs/get', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(requestBody)
+        });
+        
+        debugLog(`📥 [HTTP响应] status: ${response.status}, ok: ${response.ok}`);
+        
+        if (!response.ok) {
+          debugLog(`❌ [HTTP错误] 响应状态异常: ${response.status}`);
+          return false;
+        }
+        
+        const data = await response.json();
+        debugLog(`📋 [API响应] code: ${data.code}, message: "${data.message || 'N/A'}"`);
+        
+        const exists = data.code === 200;
+        debugLog(`${exists ? '✅' : '❌'} [结果] 路径 "${path}" ${exists ? '存在' : '不存在'}`);
+        
+        return exists;
+      } catch (error) {
+        console.error(`💥 [异常] 路径检查失败: ${path}`, error);
+        return false;
+      }
+    }
+    
+    // 生成所有可能的修复路径
+    function generateFixAttempts(originalPath, userBasePath) {
+      debugLog(`🔧 [generateFixAttempts] 生成修复尝试`);
+      debugLog(`   原始路径: "${originalPath}"`);
+      debugLog(`   用户基础路径: "${userBasePath}"`);
+      
+      const attempts = [];
+      
+      // 尝试1：去掉用户基础路径
+      if (userBasePath && userBasePath !== '/' && originalPath.startsWith(userBasePath)) {
+        const path1 = originalPath.substring(userBasePath.length) || '/';
+        attempts.push({
+          name: '去掉用户基础路径',
+          path: path1,
+          description: `从 "${originalPath}" 移除用户基础路径 "${userBasePath}"`
+        });
+      }
+      
+      // 尝试2：添加访客基础URL
+      if (!originalPath.startsWith(CONFIG.GUEST_BASE_URL)) {
+        const path2 = CONFIG.GUEST_BASE_URL + originalPath;
+        attempts.push({
+          name: '添加访客基础URL',
+          path: path2,
+          description: `为 "${originalPath}" 添加访客前缀 "${CONFIG.GUEST_BASE_URL}"`
+        });
+      }
+      
+      // 尝试3：路径去重修复
+      if (userBasePath && userBasePath !== '/') {
+        const baseSegments = userBasePath.split('/').filter(seg => seg);
+        const currentSegments = originalPath.split('/').filter(seg => seg);
+        
+        debugLog(`   [路径分析] 用户基础段: [${baseSegments.join(', ')}]`);
+        debugLog(`   [路径分析] 当前路径段: [${currentSegments.join(', ')}]`);
+        
+        // 寻找重复的路径段
+        for (let i = 0; i < currentSegments.length - baseSegments.length + 1; i++) {
+          const isMatch = baseSegments.every((baseSeg, idx) => 
+            currentSegments[i + idx] === baseSeg
+          );
+          
+          if (isMatch) {
+            const remainingSegments = currentSegments.slice(i + baseSegments.length);
+            if (remainingSegments.length > 0) {
+              const path3 = '/' + remainingSegments.join('/');
+              if (path3 !== originalPath) {
+                attempts.push({
+                  name: '路径去重',
+                  path: path3,
+                  description: `从 "${originalPath}" 去除重复路径段，保留 "${path3}"`
+                });
+              }
+            }
+          }
+        }
+      }
+      
+      // 尝试4：访客URL + 去重组合
+      if (userBasePath && userBasePath !== '/') {
+        const baseSegments = userBasePath.split('/').filter(seg => seg);
+        const currentSegments = originalPath.split('/').filter(seg => seg);
+        
+        for (let i = 0; i < currentSegments.length - baseSegments.length + 1; i++) {
+          const isMatch = baseSegments.every((baseSeg, idx) => 
+            currentSegments[i + idx] === baseSeg
+          );
+          
+          if (isMatch) {
+            const remainingSegments = currentSegments.slice(i + baseSegments.length);
+            if (remainingSegments.length > 0) {
+              const deduped = '/' + remainingSegments.join('/');
+              const path4 = CONFIG.GUEST_BASE_URL + deduped;
+              if (path4 !== originalPath && !deduped.startsWith(CONFIG.GUEST_BASE_URL)) {
+                attempts.push({
+                  name: '访客URL+去重',
+                  path: path4,
+                  description: `去重后添加访客前缀: "${deduped}" → "${path4}"`
+                });
+              }
+            }
+          }
+        }
+      }
+      
+      debugLog(`📋 [生成结果] 共 ${attempts.length} 个修复尝试:`);
+      attempts.forEach((attempt, index) => {
+        debugLog(`   ${index + 1}. [${attempt.name}] ${attempt.path}`);
+      });
+      
+      return attempts;
+    }
+    
+    // ==================== 主要逻辑 ====================
+    
+    async function checkAndRedirectPath() {
+      debugLog(`🚀 [智能重定向] 开始执行...`);
+      
+      try {
+        // 获取用户信息
+        debugLog(`👤 [用户信息] 获取当前用户...`);
+        const headers = buildRequestHeaders();
+        
+        const userResponse = await fetch('/api/me', {
+          method: 'GET',
+          headers: headers
+        });
+        debugLog(`📥 [用户API] 响应: ${userResponse.status}, ok: ${userResponse.ok}`);
+        debugLog(`🔐 [用户API] 认证状态: ${headers.Authorization ? '已认证' : '访客模式'}`);
+        
+        if (!userResponse.ok) {
+          debugLog(`❌ [用户API] 获取失败，退出`);
+          return;
+        }
+        
+        const userData = await userResponse.json();
+        debugLog(`📋 [用户数据]`, userData);
+        
+        if (userData.code !== 200 || !userData.data) {
+          debugLog(`❌ [用户数据] 无效数据，退出`);
+          return;
+        }
+        
+        const userBasePath = userData.data.base_path;
+        const currentPath = decodeURIComponent(window.location.pathname);
+        
+        debugLog(`🌐 [路径信息] 当前路径: "${currentPath}"`);
+        debugLog(`📁 [路径信息] 用户基础路径: "${userBasePath}"`);
+        
+        // 检查当前路径是否有效
+        debugLog(`\n=== 🎯 [主要检查] 验证当前路径 ===`);
+        const currentExists = await checkPathExists(currentPath);
+        
+        if (currentExists) {
+          debugLog(`🎉 [成功] 当前路径有效，无需重定向！`);
+          return;
+        }
+        
+        debugLog(`\n=== 💡 [修复模式] 开始智能修复 ===`);
+        
+        // 生成修复尝试
+        const attempts = generateFixAttempts(currentPath, userBasePath);
+        
+        if (attempts.length === 0) {
+          debugLog(`❌ [无法修复] 没有可用的修复方案`);
+          return;
+        }
+        
+        // 依次尝试每个修复方案
+        for (let i = 0; i < attempts.length; i++) {
+          const attempt = attempts[i];
+          debugLog(`\n--- 🔧 [尝试 ${i + 1}/${attempts.length}] ${attempt.name} ---`);
+          debugLog(`📝 [描述] ${attempt.description}`);
+          
+          if (await checkPathExists(attempt.path)) {
+            debugLog(`🎯 [重定向成功] ${currentPath} → ${attempt.path}`);
+            window.location.replace(attempt.path);
+            return;
+          } else {
+            debugLog(`❌ [尝试失败] 修复后路径仍不存在`);
+          }
+        }
+        
+        debugLog(`\n💔 [全部失败] 所有修复尝试均无效`);
+        
+      } catch (error) {
+        console.error(`💥 [严重错误] 重定向功能异常:`, error);
+      }
+    }
+    
+    // ==================== 启动逻辑 ====================
+    
+    debugLog(`📌 [初始化] 智能路径重定向功能已加载`);
+    debugLog(`⚙️ [配置] 访客基础URL: "${CONFIG.GUEST_BASE_URL}"`);
+    
+    // 页面加载完成后执行检查
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkAndRedirectPath);
+    } else {
+      setTimeout(checkAndRedirectPath, 500);
+    }
+  })();
+</script>
